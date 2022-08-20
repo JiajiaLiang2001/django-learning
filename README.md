@@ -67,7 +67,7 @@ https://docs.djangoproject.com/en/4.1/
 - 了解 Django 项目的文件目录结构
 - 了解 Django 项目开发服务器的启动
 
-### 开发流程
+#### 开发流程
 
 - 掌握开发服务器配置
 - 掌握项目模块创建
@@ -119,7 +119,7 @@ https://docs.djangoproject.com/en/4.1/
 
 
 
-### 从请求到响应
+#### 从请求到响应
 
 - 了解 URL 的设计及配置
 - 掌握视图的定义及作用
@@ -175,13 +175,13 @@ urlpatterns = [
 | ---------------------------- | ---------------------------- |
 | ![hello world](images/4.png) | ![hello china](images/5.png) |
 
-### 在视图中处理业务逻辑
+#### 在视图中处理业务逻辑
 
 - 理解响应 HTML 内容
 - 掌握如何获取 URL 参数
 - 掌握如何获取 GET 参数
 
-#### 响应 HTML 内容
+##### 响应 HTML 内容
 
 *hello/views.py*
 
@@ -210,7 +210,7 @@ urlpatterns = [
 | --------------------------- |
 | ![hello html](images/6.png) |
 
-#### 获取 URL 参数
+##### 获取 URL 参数
 
 *hello/views.py*
 
@@ -255,7 +255,7 @@ urlpatterns = [
 | ----------------------------------- | ----------------------------------- |
 | ![hello article list](images/8.png) | ![hello article list](images/9.png) |
 
-#### 获取 GET 请求参数
+##### 获取 GET 请求参数
 
 *hello/views.py*
 
@@ -280,7 +280,7 @@ urlpatterns = [
 | ![hello search](images/10.png) |
 | ![hello html](images/11.png)   |
 
-### 从文件中响应 HTML 内容
+#### 从文件中响应 HTML 内容
 
 增加 index.html 文件
 
@@ -359,13 +359,13 @@ urlpatterns = [
 | ----------------------------------- |
 | ![hello render html](images/13.png) |
 
-### 请求响应对象
+#### 请求响应对象
 
 - 掌握请求到响应的流程
 - 理解请求对象
 - 理解响应对象
 
-#### 请求对象 HttpRequest
+##### 请求对象
 
 - 请求方式
 - 请求头信息
@@ -400,7 +400,7 @@ urlpatterns = [
 | ![hello http request](images/14.png) |
 | ![hello http request](images/15.png) |
 
-#### 响应对象 
+##### 响应对象 
 
 - HttpResponseBase
   - **HttpResponse**
@@ -452,3 +452,119 @@ urlpatterns = [
 | text/xml         | XML文档                  |
 | application/json | json数据类型             |
 | image            | 图片或图形               |
+
+#### 重定向
+
+##### HttpResponseRedirect
+
+- 方式一：
+
+*hello/views.py*
+
+```python
+def article_detail(request, article_id):
+    if article_id < 1000:
+        return HttpResponseRedirect('/hello/404/')
+    return HttpResponse('{}'.format(article_id))
+
+
+def not_found(request):
+    return HttpResponse('404')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('article/<int:article_id>/', article_detail),
+    path('404/', not_found)
+]
+```
+
+- 方式二
+
+*hello/views.py*
+
+```python
+def article_detail(request, article_id):
+    if article_id < 1000:
+        return HttpResponseRedirect(reverse('not_found'))
+    return HttpResponse('{}'.format(article_id))
+
+
+def not_found(request):
+    return HttpResponse('404')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('article/<int:article_id>/', article_detail),
+    path('404/', not_found, name='not_found')
+]
+```
+
+##### redirect
+
+- 方式一：
+
+*hello/views.py*
+
+```python
+def article_detail(request, article_id):
+    if article_id < 1000:
+        return redirect('/hello/404/')
+    return HttpResponse('{}'.format(article_id))
+
+
+def not_found(request):
+    return HttpResponse('404')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('article/<int:article_id>/', article_detail),
+    path('404/', not_found)
+]
+```
+
+- 方式二
+
+*hello/views.py*
+
+```python
+def article_detail(request, article_id):
+    if article_id < 1000:
+        return HttpResponseRedirect(reverse('not_found'))
+    return HttpResponse('{}'.format(article_id))
+
+
+def not_found(request):
+    return HttpResponse('404')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('article/<int:article_id>/', article_detail),
+    path('404/', not_found, name='not_found')
+]
+```
+
+------
+
+| /hello/article/1000/   --->   /hello/404/ |
+| ----------------------------------------- |
+| ![hello http redirect](images/18.png)     |
+
+#### 内置视图
+
+#### 重写视图
