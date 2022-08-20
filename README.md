@@ -130,7 +130,7 @@ URL设计：
 
 正则表达式 && 指定参数类型
 
-`path`(*route*,view*, *kwargs=None***,** *name=None*)
+`path`(*route*,*view*, *kwargs=None***,** *name=None*)
 
 ------
 
@@ -288,4 +288,67 @@ urlpatterns = [
 | ---------------------------- |
 | ![hello html](images/10.png) |
 | ![hello html](images/11.png) |
+
+### 从文件中响应 HTML 内容
+
+`render_to_string`(*template_name*, *context=None***,** *request=None***,** *using=None*)
+
+- **template_name**：要使用的模板的全名或模板名称的序列
+- context：要添加到模板上下文的值的字典，默认为空
+- request：可选项 [`HttpRequest`](https://docs.djangoproject.com/zh-hans/4.1/ref/request-response/#django.http.HttpRequest) 在模板的渲染过程中可用。（dict）
+- using：可选的模板引擎 [`NAME`](https://docs.djangoproject.com/zh-hans/4.1/ref/settings/#std-setting-TEMPLATES-NAME)。对模板的搜索将限于该引擎。（Jinja2）
+
+增加 index.html 文件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <h2>Hello World!</h2>
+    </body>
+</html>
+```
+
+*hello/views.py*
+
+```python
+def render_str(request):
+    templ_name = 'index.html'
+    html = render_to_string(template_name=templ_name)
+    return HttpResponse(html)
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html),
+    # path('article/<int:month>/', article_list)
+    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
+    path('search/', search),
+    path('render/str/', render_str)
+]
+
+```
+
+> DjangoLearning/settings.py 
+
+| /hello/render/str/           |
+| ---------------------------- |
+| ![hello html](images/12.png) |
+
+`render`(*request*,*template_name*,*context=None*, *content_type=None*, *status=None***,** *using=None***)**
+
+- **request**：用于生成此响应的请求对象
+- **template_name**：要使用的模板的全名或模板名称的序列
+- context：要添加到模板上下文的值的字典，默认为空
+- content_type：用于结果文档的 MIME 类型。默认 `'text/html'` 
+- status：响应的状态码默认为 `200`
+- using：可选的模板引擎 [`NAME`](https://docs.djangoproject.com/zh-hans/4.1/ref/settings/#std-setting-TEMPLATES-NAME)
 
