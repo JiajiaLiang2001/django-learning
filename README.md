@@ -201,8 +201,7 @@ def hello_html(request):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
+    ...
     path('html/', hello_html)
 ]
 ```
@@ -224,9 +223,7 @@ def article_list(request, month):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
-    path('html/', hello_html),
+    ...
     path('article/<int:month>/', article_list)
 ]
 ```
@@ -248,9 +245,7 @@ def article_list(request, month):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
-    path('html/', hello_html),
+    ...
     # path('article/<int:month>/', article_list)
     re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list)
 ]
@@ -275,11 +270,7 @@ def search(request):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
-    path('html/', hello_html),
-    # path('article/<int:month>/', article_list)
-    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
+    ...
     path('search/', search)
 ]
 ```
@@ -328,12 +319,7 @@ def render_str(request):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
-    path('html/', hello_html),
-    # path('article/<int:month>/', article_list)
-    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
-    path('search/', search),
+    ...
     path('render/str/', render_str)
 ]
 ```
@@ -364,14 +350,8 @@ def render_html(request):
 
 ```python
 urlpatterns = [
-    path('world/', hello_world),
-    path('china/', hello_china),
-    path('html/', hello_html),
-    # path('article/<int:month>/', article_list)
-    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
-    path('search/', search),
-    path('render/str/', render_str),
-    path('render/html/', render_html, )
+    ...
+    path('render/html/', render_html)
 ]
 ```
 
