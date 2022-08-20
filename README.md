@@ -105,8 +105,6 @@ https://docs.djangoproject.com/en/4.1/
    *DjangoLearning/urls.py*
 
    ```python
-   from hello.views import hello_world
-   
    urlpatterns = [
    	...
        path('hello/', hello_world)
@@ -147,12 +145,6 @@ URL设计：
 *hello/views.py*
 
 ```python
-from django.shortcuts import render
-from django.http import HttpResponse
-
-
-# Create your views here.
-
 def hello_world(request):
     return HttpResponse('Hello World')
 
@@ -164,9 +156,6 @@ def hello_china(request):
 *hello/urls.py*
 
 ```python
-from django.urls import path
-from hello.views import hello_world, hello_china
-
 urlpatterns = [
     path('world/', hello_world),
     path('china/', hello_china)
@@ -176,20 +165,127 @@ urlpatterns = [
 *DjangoLearning/urls.py*
 
 ```python
-from django.contrib import admin
-from django.urls import path, include
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', include('hello.urls'))
 ]
 ```
 
-| /hello/world                 | /hello/china                 |
+| /hello/world/                | /hello/china/                |
 | ---------------------------- | ---------------------------- |
 | ![hello world](images/4.png) | ![hello china](images/5.png) |
 
 ### 在视图中处理业务逻辑
 
+- 理解响应 HTML 内容
+- 掌握如何获取 URL 参数
+- 掌握如何获取 GET 参数
 
+#### 响应 HTML 内容
+
+*hello/views.py*
+
+```python
+def hello_html(request):
+    html = """
+    <html>
+        <body>
+            <h1 style="color:#f00">hello html</h1>
+        </body>
+    </html>
+    """
+    return HttpResponse(html)
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html)
+]
+```
+
+| /hello/html/                |
+| --------------------------- |
+| ![hello html](images/6.png) |
+
+#### 获取 URL 参数
+
+*hello/views.py*
+
+```python
+def article_list(request, month):
+    return HttpResponse('article: {}'.format(month))
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html),
+    path('article/<int:month>/', article_list)
+]
+```
+
+| /hello/article/2/           |
+| --------------------------- |
+| ![hello html](images/7.png) |
+
+**用正则表达式匹配**
+
+*hello/views.py*
+
+```python
+def article_list(request, month):
+    return HttpResponse('article: {}'.format(month))
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html),
+    # path('article/<int:month>/', article_list)
+    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list)
+]
+```
+
+| /hello/article/02/          | /hello/article/12/          |
+| --------------------------- | --------------------------- |
+| ![hello html](images/8.png) | ![hello html](images/9.png) |
+
+#### 获取 GET 请求参数
+
+*hello/views.py*
+
+```python
+def search(request):
+    name = request.GET.get('name', '')
+    print(name)
+    return HttpResponse('查询成功')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html),
+    # path('article/<int:month>/', article_list)
+    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
+    path('search/', search)
+]
+```
+
+| hello/search/?name=China     |
+| ---------------------------- |
+| ![hello html](images/10.png) |
+| ![hello html](images/11.png) |
 
