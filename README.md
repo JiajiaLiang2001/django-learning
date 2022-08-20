@@ -228,9 +228,9 @@ urlpatterns = [
 ]
 ```
 
-| /hello/article/2/           |
-| --------------------------- |
-| ![hello html](images/7.png) |
+| /hello/article/2/                   |
+| ----------------------------------- |
+| ![hello article list](images/7.png) |
 
 **用正则表达式匹配**
 
@@ -251,9 +251,9 @@ urlpatterns = [
 ]
 ```
 
-| /hello/article/02/          | /hello/article/12/          |
-| --------------------------- | --------------------------- |
-| ![hello html](images/8.png) | ![hello html](images/9.png) |
+| /hello/article/02/                  | /hello/article/12/                  |
+| ----------------------------------- | ----------------------------------- |
+| ![hello article list](images/8.png) | ![hello article list](images/9.png) |
 
 #### 获取 GET 请求参数
 
@@ -275,10 +275,10 @@ urlpatterns = [
 ]
 ```
 
-| hello/search/?name=China     |
-| ---------------------------- |
-| ![hello html](images/10.png) |
-| ![hello html](images/11.png) |
+| hello/search/?name=China       |
+| ------------------------------ |
+| ![hello search](images/10.png) |
+| ![hello html](images/11.png)   |
 
 ### 从文件中响应 HTML 内容
 
@@ -326,9 +326,9 @@ urlpatterns = [
 
 > DjangoLearning/settings.py 
 
-| /hello/render/str/           |
-| ---------------------------- |
-| ![hello html](images/12.png) |
+| /hello/render/str/                 |
+| ---------------------------------- |
+| ![hello render str](images/12.png) |
 
 `render`(*request*,*template_name*,*context=None*, *content_type=None*, *status=None***,** *using=None***)**
 
@@ -355,6 +355,100 @@ urlpatterns = [
 ]
 ```
 
-| /hello/render/html/          |
-| ---------------------------- |
-| ![hello html](images/13.png) |
+| /hello/render/html/                 |
+| ----------------------------------- |
+| ![hello render html](images/13.png) |
+
+### 请求响应对象
+
+- 掌握请求到响应的流程
+- 理解请求对象
+- 理解响应对象
+
+#### 请求对象 HttpRequest
+
+- 请求方式
+- 请求头信息
+- 请求传递参数
+
+*hello/views.py*
+
+```python
+def http_request(request):
+    print(request.method)
+
+    print(request.META)
+    print(request.headers)
+    # print(request.headers['User-Agent'])
+
+    name = request.GET.get('name', '')
+    print(name)
+    return HttpResponse('响应')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('http/req/', http_request)
+]
+```
+
+| /hello/http/req/?name=Jack           |
+| ------------------------------------ |
+| ![hello http request](images/14.png) |
+| ![hello http request](images/15.png) |
+
+#### 响应对象 
+
+- HttpResponseBase
+  - **HttpResponse**
+    - **JsonResponse**
+    - HttpResponseNotFound
+    - HttpResponseBadRequest
+    - HttpResponseRedirectBase
+      - **HttpResponseRedirect**
+  - StreamingHttpResponse
+    - FileResponse
+
+*hello/views.py*
+
+```python
+def http_response(request):
+    resp = HttpResponse('响应内容')
+    return resp
+
+def http_json_response(request):
+    user_info = {
+        'name': '张三',
+        'age': 34
+    }
+    resp = JsonResponse(user_info)
+    return resp
+
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    ...
+    path('http/resp/', http_response),
+    path('http/jsonresp/', http_json_response)
+]
+```
+
+| /hello/http/resp/                     | /hello/http/jsonresp/                      |
+| ------------------------------------- | ------------------------------------------ |
+| ![hello http response](images/16.png) | ![hello http json response](images/17.png) |
+
+常见的Content-Type：
+
+| 类型             | 说明                     |
+| ---------------- | ------------------------ |
+| text/html        | 超文本标记语言文本(HTML) |
+| text/plain       | 普通文本                 |
+| text/xml         | XML文档                  |
+| application/json | json数据类型             |
+| image            | 图片或图形               |
