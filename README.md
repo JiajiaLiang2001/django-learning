@@ -291,13 +291,6 @@ urlpatterns = [
 
 ### 从文件中响应 HTML 内容
 
-`render_to_string`(*template_name*, *context=None***,** *request=None***,** *using=None*)
-
-- **template_name**：要使用的模板的全名或模板名称的序列
-- context：要添加到模板上下文的值的字典，默认为空
-- request：可选项 [`HttpRequest`](https://docs.djangoproject.com/zh-hans/4.1/ref/request-response/#django.http.HttpRequest) 在模板的渲染过程中可用。（dict）
-- using：可选的模板引擎 [`NAME`](https://docs.djangoproject.com/zh-hans/4.1/ref/settings/#std-setting-TEMPLATES-NAME)。对模板的搜索将限于该引擎。（Jinja2）
-
 增加 index.html 文件
 
 ```html
@@ -312,6 +305,15 @@ urlpatterns = [
     </body>
 </html>
 ```
+
+------
+
+`render_to_string`(*template_name*, *context=None***,** *request=None***,** *using=None*)
+
+- **template_name**：要使用的模板的全名或模板名称的序列
+- context：要添加到模板上下文的值的字典，默认为空
+- request：可选项 [`HttpRequest`](https://docs.djangoproject.com/zh-hans/4.1/ref/request-response/#django.http.HttpRequest) 在模板的渲染过程中可用。（dict）
+- using：可选的模板引擎 [`NAME`](https://docs.djangoproject.com/zh-hans/4.1/ref/settings/#std-setting-TEMPLATES-NAME)。对模板的搜索将限于该引擎。（Jinja2）
 
 *hello/views.py*
 
@@ -334,7 +336,6 @@ urlpatterns = [
     path('search/', search),
     path('render/str/', render_str)
 ]
-
 ```
 
 > DjangoLearning/settings.py 
@@ -352,3 +353,28 @@ urlpatterns = [
 - status：响应的状态码默认为 `200`
 - using：可选的模板引擎 [`NAME`](https://docs.djangoproject.com/zh-hans/4.1/ref/settings/#std-setting-TEMPLATES-NAME)
 
+*hello/views.py*
+
+```python
+def render_html(request):
+    return render(request, 'index.html')
+```
+
+*hello/urls.py*
+
+```python
+urlpatterns = [
+    path('world/', hello_world),
+    path('china/', hello_china),
+    path('html/', hello_html),
+    # path('article/<int:month>/', article_list)
+    re_path(r'^article/(?P<month>0?[1-9]|1[012])/$', article_list),
+    path('search/', search),
+    path('render/str/', render_str),
+    path('render/html/', render_html, )
+]
+```
+
+| /hello/render/html/          |
+| ---------------------------- |
+| ![hello html](images/13.png) |
