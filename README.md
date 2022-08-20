@@ -567,4 +567,44 @@ urlpatterns = [
 
 #### 内置视图
 
-#### 重写视图
+- 了解常见错误
+- 掌握重写内置视图
+- 了解处理静态文件
+
+##### 异常错误
+
+常见错误
+
+| 错误代码 | 详细                  |
+| -------- | --------------------- |
+| 400      | Bad Request           |
+| 403      | Forbidden             |
+| 404      | Not Found             |
+| 500      | Internal Server Error |
+
+#### 静态文件
+
+*DjangoLearning/settings.py*
+
+```python
+MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
+```
+
+*DjangoLearning/urls.py*
+
+```python
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
+```
+
+
+
+<div align=center>
+  <img src="images/19.png" title="Static File" height="50%" width="50%">
+</div>
+
+#### 使用 class 重写视图
